@@ -1,5 +1,6 @@
 public class Machine {
     private static final int MAX_ADDRESS = 0xFFFFF;
+    private static final int NUMBER_OF_DEVICES = 256;
     private int regA;
     private int regX;
     private int regL;
@@ -10,7 +11,18 @@ public class Machine {
     private int regPC;
     private int regSW;
     private final byte[] memory = new byte[MAX_ADDRESS];
+    private Device[] devices = new Device[NUMBER_OF_DEVICES];
 
+    public Machine() {
+        devices[0] = new InputDevice(System.in);
+        devices[1] = new OutputDevice(System.out);
+        devices[2] = new OutputDevice(System.err);
+        for (int i = 3; i < NUMBER_OF_DEVICES; i++) {
+            try {
+                devices[i] = new FileDevice(i + ".dev");
+            } catch (Exception _) {}
+        }
+    }
 
     public int getA() {
         return regA;
@@ -125,6 +137,14 @@ public class Machine {
         setByte(address, val >> 16);
         setByte(address + 1, val >> 8);
         setByte(address + 2, val);
+    }
+
+    public Device getDevice(int ix) {
+        return devices[ix];
+    }
+
+    public void setDevice(int ix, Device device) {
+        devices[ix] = device;
     }
 
     //TODO setFloat, getFloat
