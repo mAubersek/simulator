@@ -24,6 +24,7 @@ public class Machine {
         }
     }
 
+
     public int getA() {
         return regA;
     }
