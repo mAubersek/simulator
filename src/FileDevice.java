@@ -20,6 +20,9 @@ public class FileDevice extends Device {
 
     @Override
     public int read() {
+        if (file == null) {
+            createFile();
+        }
         try {
             int val = file.read();
             if (val == -1) {
